@@ -3,9 +3,11 @@ import DashboardLayout from '../../Components/Layout/DashboardLayout'
 import { LuUser, LuUser2 } from 'react-icons/lu'
 import DashboardCard from '../../Components/Common/DashboardCard'
 
-import users from '../../Constant/Users.json'
+import { useUsers } from '../../Core/Context/UserContext'
 
 const Dashboard = () => {
+
+    const {users} = useUsers()
   return (
     <>
         <DashboardLayout>
