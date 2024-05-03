@@ -21,7 +21,8 @@ const Users = () => {
 
   //Context
   const {users,setUsers} = useUsers()
-  
+  // SORT
+  const [sortByName,setSortByName] = useState("")
 
   //Pagination.
   const [currentUser, setCurrentUser] = useState<IUserInterface[]>([])
@@ -37,6 +38,18 @@ const Users = () => {
   const indexItemAval = indexItemAxar - itemPerPage
 
   const totalPages = Math.ceil(users.length / itemPerPage)
+
+  const actionOptions = [
+    {
+      title: "Delete User", value: 'del'
+    },
+    {
+      title: 'Deactivate user', value: 'dea'
+    }, 
+    {
+      title: 'Active user', value: 'act'
+    }
+  ]
 
   useEffect(() => {
     setCurrentUser(users.slice(indexItemAval, indexItemAxar))
@@ -115,6 +128,17 @@ const Users = () => {
     }
   }
 
+  /// SORTINGS.!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  const sortByNameHandler = (input: string) => {
+    setSortByName(input)
+    const sortedUsers = [...users]
+    sortedUsers.sort((a: any,b: any) => {
+      return input === "asc" ? a.username.localeCompare(b.username) : b.username.localeCompare(a.username)
+    })
+    setUsers(sortedUsers)
+  }
+
+
   return (
     <DashboardLayout>
       <main className='py-10 lg:pl-72 font-semibold'>
@@ -128,7 +152,7 @@ const Users = () => {
                 </p>
               </div>
               <div className='mt-4 sm:ml-16 sm:mt-0 sm:flex-none flex space-x-3'>
-                <Link to='/addUser' className='block hover:bg-[#048cb9] rounded-md bg-[#0099CC] px-3 py-2 text-center text-md font-semibold text-white'>
+                <Link to='/createUser' className='block hover:bg-[#048cb9] rounded-md bg-[#0099CC] px-3 py-2 text-center text-md font-semibold text-white'>
                   Add user
                 </Link>
                 <button onClick={resetDataHandler}className='bg-yellow-500 hover:bg-yellow-400 px-3 py-2 text-center rounded-md font-semibold text-white'>
@@ -142,7 +166,7 @@ const Users = () => {
                 sortByStatus={''}
                 sortByName={''}
                 sortByPosition={''}
-                setSortByName={() => {}}
+                setSortByName={sortByNameHandler}
                 setSortByPosition={() => {}}
                 setSortByStatus={() => {}}
                 setSortByGender={() => {}}
@@ -151,7 +175,7 @@ const Users = () => {
                 sortByAge={''}
                 setSortByAge={() => {}}
               />
-              <Actions setUserAction={setUserAction} actionHandler={actionHandler} actionOptions={[]} />
+              <Actions setUserAction={setUserAction} actionHandler={actionHandler} actionOptions={actionOptions} />
               <UserList
                 users={currentUser}
                 allChecked={allChecked}
